@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const SpotifyWebApi = require("spotify-web-api-node");
 const querystring = require("querystring");
+const { REDIRECT_URI, CLIENT_ID, CLIENT_SECRET } = require("./constants");
 
 const app = express();
 
@@ -13,9 +14,9 @@ app.use(bodyParser.json());
 app.post("/login", (req, res) => {
   const code = req.body.code;
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://localhost:3000",
-    clientId: "961e293d6bfc41c0b753d647bf1dcb08",
-    clientSecret: "b1012699910f438d8d80129075f37580",
+    redirectUri: REDIRECT_URI,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
   });
   spotifyApi
     .authorizationCodeGrant(req.body.code)
