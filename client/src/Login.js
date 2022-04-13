@@ -5,7 +5,7 @@ import { useEffect } from "react/cjs/react.production.min";
 import useAuth from "./useAuth";
 
 const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=961e293d6bfc41c0b753d647bf1dcb08&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
+  "https://accounts.spotify.com/authorize?client_id=52c66e4315d64fad9d30fc06a14e7ff1&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state%20user-top-read";
 
 export default function Login({ code }) {
   // const accessToken = useAuth(code);
@@ -13,7 +13,7 @@ export default function Login({ code }) {
   function authorize() {
     var body = {
       scopes:
-        "user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state",
+        "user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-top-read user-modify-playback-state",
     };
     fetch("http://localhost:3001/authorize", {
       method: "POST",
@@ -21,6 +21,7 @@ export default function Login({ code }) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": "Bearer" + {code},
       },
     })
       .then((res) => {

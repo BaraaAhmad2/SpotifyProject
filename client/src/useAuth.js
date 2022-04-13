@@ -9,6 +9,7 @@ export default function useAuth(code) {
   useEffect(() => {
     console.log(code);
     const config = { headers: { "Content-Type": "application/json" } };
+
     const data = {
       accesscode: code,
     };
