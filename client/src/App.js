@@ -5,7 +5,7 @@ import Home from "./Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 const code = new URLSearchParams(window.location.search).get("code");
-
+window.localStorage.setItem("token", code);
 function App() {
   return code ? <Dashboard code={code} /> : <Login />;
 }
