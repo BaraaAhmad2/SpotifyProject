@@ -18,6 +18,7 @@ app.post("/login", (req, res) => {
     clientId: "961e293d6bfc41c0b753d647bf1dcb08",
     clientSecret: "b1012699910f438d8d80129075f37580",
   });
+  console.log(code)
   spotifyApi
     .authorizationCodeGrant(req.body.code)
     .then((data) => {
@@ -32,9 +33,11 @@ app.post("/login", (req, res) => {
       res.sendStatus(400);
     });
 });
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
