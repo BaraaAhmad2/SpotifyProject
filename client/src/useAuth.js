@@ -16,7 +16,9 @@ export default function useAuth(code) {
     console.log(data);
 
     axios
-      .post("http://localhost:3001/login", data)
+      .post("http://localhost:3001/login", {
+        code,
+      })
       .then((res) => {
         console.log("HELLO");
         setAccessToken(res.data.accessToken);
