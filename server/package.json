@@ -18,9 +18,11 @@
     "express": "^4.17.3",
     "lyrics-finder": "^21.7.0",
     "querystring": "^0.2.1",
+    "react-bootstrap": "^2.2.3",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
-    "spotify-web-api-node": "^5.0.2"
+    "spotify-web-api-node": "^5.0.2",
+    "spotify-web-playback": "^1.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
