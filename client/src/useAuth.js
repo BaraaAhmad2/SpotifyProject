@@ -31,6 +31,7 @@ export default function useAuth(code) {
       });
   }, [code]);
 
+  
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
     const interval = setInterval(() => {

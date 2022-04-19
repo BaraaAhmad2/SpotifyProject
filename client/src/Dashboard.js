@@ -13,15 +13,24 @@ const spotifyApi = new SpotifyWebApi({
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
-  const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  
   const [playingTrack, setPlayingTrack] = useState();
   const [lyrics, setLyrics] = useState("");
+
+  const [topArtist, setTopArtist] = useState([]);
+  const [topSongs, setTopSongs] = useState([]);
+
+
   let topBand = [];
   let topSong = [];
+
+
+
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+
   function display() {
     spotifyApi.getMe().then(
       function (data) {
@@ -36,41 +45,35 @@ export default function Dashboard({ code }) {
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
           function (data) {
             
-            console.log("Song: ", data.body.tracks.at(getRandomInt(4)).name.toString());
+            
+            for(var i =0; i < 5; ++ i){
+              topSong[i] = data.body.tracks.at(getRandomInt(9)).name
+              
+              console.log("Song: ", topSong[i]);
+              break;
+            }
           },
           function (err) {  
             console.log("Something went wrong!", err);
           }
         );
     }
-    spotifyApi.getMyTopArtists({ limit: 5 }).then(
+    spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
        
-        for(var i =0; i < 5; ++i){
+        for(var i =5; i < 10; ++i){
           topBand[i] = data.body.items.at(i).id.toString();
           console.log("Your top artists: ", topBand[i]);
           topTracks(topBand[i]);
         }
-        // topBand = data.body.items.at(4).id.toString(); 
-          
+          setTopArtist(data.body.items);
       },
       function (err) {
         console.log("Something went wrong!", err);
       }
     );
 
-    // console.log("top band", topBand);
-    // console.log("Top 5 Artists", data.body);
-
-    // spotifyApi.getMyTopTracks({ limit: 5 }).then(
-    //   function (data) {
-    //     let topTracks = data.body.items;
-    //     console.log("Top 5 songs", topTracks);
-    //   },
-    //   function (err) {
-    //     console.log("Something went wrong!", err);
-    //   }
-    // );
+    
   }
 
   useEffect(() => {
@@ -79,12 +82,16 @@ export default function Dashboard({ code }) {
   }, [accessToken]);
 
   return (
-    <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
-      <div className="border d-flex align-items-center justify-content-center">
+    
+    <div>
         <Button className="justify-content-center" onClick={display}>
           Send Request
         </Button>
+        <div className='item-container'>
+        <div>
+         
+          </div>
       </div>
-    </Container>
+   </div>
   );
 }
