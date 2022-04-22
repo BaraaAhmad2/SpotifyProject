@@ -7,7 +7,6 @@ import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
 import { Button, Card } from "react-bootstrap";
 import ReactDOM from "react-dom";
-import update from 'react-addons-update';
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -16,6 +15,8 @@ const spotifyApi = new SpotifyWebApi({
 
 let topBand = [];
   let topSong = [];
+  let topArtists = [];
+  var idTracker = 0;
   var count = 5;
   var tracker = 0;
   var ze = 0;
@@ -53,6 +54,19 @@ export default function Dashboard({ code }) {
       }
     );
 
+      function getName(artistID) {
+    spotifyApi.getArtist(artistID)
+    .then(function(data) {
+      if (idTracker < 5) {
+        topArtists[idTracker] = data.body.name
+        idTracker++;
+      }
+  }, function(err) {
+    console.error(err);
+  });
+      }
+  
+
     function topTracks(artistID){
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
           function (data) {
@@ -82,6 +96,7 @@ export default function Dashboard({ code }) {
           topBand[i] = data.body.items.at(i).id.toString();
           console.log("Your top artists: ", topBand[i]);
           topTracks(topBand[i]);
+          getName(topBand[i]);
         }
           //setTopArtist(data.body.items);
       },
@@ -89,13 +104,12 @@ export default function Dashboard({ code }) {
         console.log("Something went wrong!", err);
       }
     );
-
     
   }
 
   const addItemHandler=()=> {
   
-    let combined = topBand[count] + " " + topSong[ze]
+    let combined = topArtists[ze] + " " + topSong[ze]
     setTopArtist([...topArtist, {
    
       pCode: topArtist.length,
