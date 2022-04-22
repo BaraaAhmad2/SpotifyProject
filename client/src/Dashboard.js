@@ -26,9 +26,6 @@ export default function Dashboard({ code }) {
   const [playingTrack, setPlayingTrack] = useState();
   const [lyrics, setLyrics] = useState("");
 
-  // let topBand = [];
-  // let topSong = [];
-
   const [topArtist, setTopArtist] = useState([
     {pCode:'', pName:''},
     // {pCode:2,pName:topBand[6]},
