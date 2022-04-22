@@ -6,10 +6,16 @@ import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
 import { Button, Card } from "react-bootstrap";
+import ReactDOM from "react-dom";
+
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: "961e293d6bfc41c0b753d647bf1dcb08",
+  clientId: "52c66e4315d64fad9d30fc06a14e7ff1",
 });
+
+let topBand = [];
+  let topSong = [];
+  var count = 5;
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
@@ -17,14 +23,19 @@ export default function Dashboard({ code }) {
   const [playingTrack, setPlayingTrack] = useState();
   const [lyrics, setLyrics] = useState("");
 
-  const [topArtist, setTopArtist] = useState([]);
+  // let topBand = [];
+  // let topSong = [];
+
+  const [topArtist, setTopArtist] = useState([
+    {pCode:1,pName:topBand[5]},
+    // {pCode:2,pName:topBand[6]},
+    // {pCode:3,pName:topBand[7]},
+    // {pCode:4,pName:topBand[8]},
+    // {pCode:5,pName:topBand[9]},
+  ]);
+
+
   const [topSongs, setTopSongs] = useState([]);
-
-
-  let topBand = [];
-  let topSong = [];
-
-
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -32,6 +43,7 @@ export default function Dashboard({ code }) {
 
 
   function display() {
+    
     spotifyApi.getMe().then(
       function (data) {
         console.log("Name: ", data.body.display_name);
@@ -58,6 +70,7 @@ export default function Dashboard({ code }) {
           }
         );
     }
+
     spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
        
@@ -66,7 +79,7 @@ export default function Dashboard({ code }) {
           console.log("Your top artists: ", topBand[i]);
           topTracks(topBand[i]);
         }
-          setTopArtist(data.body.items);
+          //setTopArtist(data.body.items);
       },
       function (err) {
         console.log("Something went wrong!", err);
@@ -76,10 +89,28 @@ export default function Dashboard({ code }) {
     
   }
 
+  const addItemHandler=()=> {
+    
+    setTopArtist([...topArtist, {
+   
+      pCode: topArtist.length,
+      pName: topBand[count]
+    }])
+
+    count++;
+    
+    // let nObj = {pCode:count+6,pName:topSong[count]}
+    // count++;
+    // let arr = topArtist.filter(nObj);
+    // setTopArtist(arr);
+    
+  }
+
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
+
 
   return (
     
@@ -88,10 +119,17 @@ export default function Dashboard({ code }) {
           Send Request
         </Button>
         <div className='item-container'>
-        <div>
-         
-          </div>
+        <h3>Bands</h3>
+        <ul>{
+        topArtist.map(pObj=>(
+          <li key={pObj.pCode}>{pObj.pName}</li>
+        )
+        )}
+        </ul>
+        <button onClick={addItemHandler}>Add Band</button>
       </div>
-   </div>
+   </div> 
   );
 }
+  
+
