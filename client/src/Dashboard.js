@@ -7,6 +7,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
 import { Button, Card } from "react-bootstrap";
 import ReactDOM from "react-dom";
+import update from 'react-addons-update';
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -16,6 +17,8 @@ const spotifyApi = new SpotifyWebApi({
 let topBand = [];
   let topSong = [];
   var count = 5;
+  var tracker = 0;
+  var ze = 0;
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
@@ -27,7 +30,7 @@ export default function Dashboard({ code }) {
   // let topSong = [];
 
   const [topArtist, setTopArtist] = useState([
-    {pCode:1,pName:topBand[5]},
+    {pCode:'', pName:''},
     // {pCode:2,pName:topBand[6]},
     // {pCode:3,pName:topBand[7]},
     // {pCode:4,pName:topBand[8]},
@@ -58,12 +61,16 @@ export default function Dashboard({ code }) {
           function (data) {
             
             
-            for(var i =0; i < 5; ++ i){
-              topSong[i] = data.body.tracks.at(getRandomInt(9)).name
+            // for(tracker; tracker < 5; ++ i){
+              if(tracker < 5) {
+              topSong[tracker] = data.body.tracks.at(getRandomInt(9)).name
               
-              console.log("Song: ", topSong[i]);
-              break;
+              console.log("Song: ", topSong[tracker]);
+              tracker++;
+              
             }
+          
+
           },
           function (err) {  
             console.log("Something went wrong!", err);
@@ -90,15 +97,17 @@ export default function Dashboard({ code }) {
   }
 
   const addItemHandler=()=> {
-    
+  
+    let combined = topBand[count] + " " + topSong[ze]
     setTopArtist([...topArtist, {
    
       pCode: topArtist.length,
-      pName: topBand[count]
+      pName: combined
     }])
-
+    ze++;
     count++;
-    
+  
+  
     // let nObj = {pCode:count+6,pName:topSong[count]}
     // count++;
     // let arr = topArtist.filter(nObj);
@@ -120,13 +129,13 @@ export default function Dashboard({ code }) {
         </Button>
         <div className='item-container'>
         <h3>Bands</h3>
+        <button onClick={addItemHandler}>Add Band</button>
         <ul>{
         topArtist.map(pObj=>(
           <li key={pObj.pCode}>{pObj.pName}</li>
         )
         )}
         </ul>
-        <button onClick={addItemHandler}>Add Band</button>
       </div>
    </div> 
   );
