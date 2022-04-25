@@ -1,40 +1,32 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
-import Player from "./Player";
-import TrackSearchResult from "./TrackSearchResult";
 import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
 import { Button, Card } from "react-bootstrap";
 import ReactDOM from "react-dom";
-
+import update from "react-addons-update";
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: "52c66e4315d64fad9d30fc06a14e7ff1",
+  clientId: "961e293d6bfc41c0b753d647bf1dcb08",
 });
 
 let topBand = [];
-  let topSong = [];
-  let topArtists = [];
-  var idTracker = 0;
-  var count = 5;
-  var tracker = 0;
-  var ze = 0;
+let songURL = [];
+let artistName = [];
+let topSong = [];
+var count = 5;
+var tracker = 0;
+var ze = 0;
+var othercounter = 0;
 
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
-  
+
   const [playingTrack, setPlayingTrack] = useState();
   const [lyrics, setLyrics] = useState("");
 
-  const [topArtist, setTopArtist] = useState([
-    {pCode:'', pName:''},
-    // {pCode:2,pName:topBand[6]},
-    // {pCode:3,pName:topBand[7]},
-    // {pCode:4,pName:topBand[8]},
-    // {pCode:5,pName:topBand[9]},
-  ]);
-
+  const [topArtist, setTopArtist] = useState([{ pCode: "", pName: "" }]);
 
   const [topSongs, setTopSongs] = useState([]);
 
@@ -42,9 +34,7 @@ export default function Dashboard({ code }) {
     return Math.floor(Math.random() * max);
   }
 
-
   function display() {
-    
     spotifyApi.getMe().then(
       function (data) {
         console.log("Name: ", data.body.display_name);
@@ -54,102 +44,80 @@ export default function Dashboard({ code }) {
       }
     );
 
-      function getName(artistID) {
-    spotifyApi.getArtist(artistID)
-    .then(function(data) {
-      if (idTracker < 5) {
-        topArtists[idTracker] = data.body.name
-        idTracker++;
-      }
-  }, function(err) {
-    console.error(err);
-  });
-      }
-  
-
-    function topTracks(artistID){
+    function topTracks(artistID) {
+      const iRand = getRandomInt(9);
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
-          function (data) {
-            
-            
-            // for(tracker; tracker < 5; ++ i){
-              if(tracker < 5) {
-              topSong[tracker] = data.body.tracks.at(getRandomInt(9)).name
-              
-              console.log("Song: ", topSong[tracker]);
-              tracker++;
-              
-            }
-          
+        function (data) {
+          //console.log(data.body.tracks.at(0).external_urls);
+          if (tracker < 5) {
+            topSong[tracker] = data.body.tracks.at(iRand).name;
+            songURL[tracker] = data.body.tracks.at(iRand).external_urls.spotify;
 
-          },
-          function (err) {  
-            console.log("Something went wrong!", err);
+            console.log("Song: ", topSong[tracker]);
+            console.log(songURL[tracker]);
+
+            tracker++;
           }
-        );
+        },
+        function (err) {
+          console.log("Something went wrong!", err);
+        }
+      );
     }
 
     spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
-       
-        for(var i =5; i < 10; ++i){
+        for (var i = 5; i < 10; ++i) {
           topBand[i] = data.body.items.at(i).id.toString();
+          artistName[i] = data.body.items.at(i).name.toString();
           console.log("Your top artists: ", topBand[i]);
           topTracks(topBand[i]);
-          getName(topBand[i]);
         }
-          //setTopArtist(data.body.items);
       },
       function (err) {
         console.log("Something went wrong!", err);
       }
     );
-    
   }
 
-  const addItemHandler=()=> {
-  
-    let combined = topArtists[ze] + " " + topSong[ze]
-    setTopArtist([...topArtist, {
-   
-      pCode: topArtist.length,
-      pName: combined
-    }])
+  const addItemHandler = () => {
+    let combined = artistName[count] + "- " + topSong[ze];
+    let link = songURL[othercounter];
+
+    setTopArtist([
+      ...topArtist,
+      {
+        pCode: topArtist.length,
+        pName: combined,
+        pLink: link,
+      },
+    ]);
     ze++;
     count++;
-  
-  
-    // let nObj = {pCode:count+6,pName:topSong[count]}
-    // count++;
-    // let arr = topArtist.filter(nObj);
-    // setTopArtist(arr);
-    
-  }
+    othercounter++;
+  };
 
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken]);
 
-
   return (
-    
     <div>
-        <Button className="justify-content-center" onClick={display}>
-          Send Request
-        </Button>
-        <div className='item-container'>
+      <Button className="justify-content-center" onClick={display}>
+        Send Request
+      </Button>
+      <div className="item-container">
         <h3>Bands</h3>
         <button onClick={addItemHandler}>Add Band</button>
-        <ul>{
-        topArtist.map(pObj=>(
-          <li key={pObj.pCode}>{pObj.pName}</li>
-        )
-        )}
+        <ul>
+          {topArtist.map((pObj) => (
+            <li key={pObj.pCode}>
+              <a href={pObj.pLink}>{pObj.pName}</a>
+            </li>
+          ))}
         </ul>
       </div>
-   </div> 
+    </div>
   );
 }
-  
-
