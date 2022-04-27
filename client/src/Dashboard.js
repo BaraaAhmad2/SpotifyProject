@@ -15,8 +15,9 @@ let topBand = [];
 let songURL = [];
 let artistName = [];
 let topSong = [];
-var count = 5;
+var count = 0;
 var tracker = 0;
+var tracker2 = 0;
 var ze = 0;
 var othercounter = 0;
 
@@ -49,7 +50,7 @@ export default function Dashboard({ code }) {
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
         function (data) {
           //console.log(data.body.tracks.at(0).external_urls);
-          if (tracker < 5) {
+          if (tracker < 10) {
             topSong[tracker] = data.body.tracks.at(iRand).name;
             songURL[tracker] = data.body.tracks.at(iRand).external_urls.spotify;
 
@@ -67,12 +68,16 @@ export default function Dashboard({ code }) {
 
     spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
-        for (var i = 5; i < 10; ++i) {
+        const iRand = getRandomInt(9);
+
+        for(var i=0; i< 10; ++i){
+          
+      
           topBand[i] = data.body.items.at(i).id.toString();
-          artistName[i] = data.body.items.at(i).name.toString();
-          console.log("Your top artists: ", topBand[i]);
           topTracks(topBand[i]);
-        }
+          artistName[i] = data.body.items.at(i).name.toString();
+          continue;
+      }
       },
       function (err) {
         console.log("Something went wrong!", err);
@@ -81,6 +86,7 @@ export default function Dashboard({ code }) {
   }
 
   const addItemHandler = () => {
+    let iRand =getRandomInt;
     let combined = artistName[count] + "- " + topSong[ze];
     let link = songURL[othercounter];
 
