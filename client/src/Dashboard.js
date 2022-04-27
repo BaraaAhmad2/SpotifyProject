@@ -6,6 +6,9 @@ import axios from "axios";
 import { Button, Card } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import update from "react-addons-update";
+import {NavLink, tbody, table} from  'react-bootstrap';
+import hcbgImage from "./images/header-background.jpg";
+import bodyImage from "./images/body.jpg";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "961e293d6bfc41c0b753d647bf1dcb08",
@@ -109,20 +112,84 @@ export default function Dashboard({ code }) {
   }, [accessToken]);
 
   return (
-    <div>
-      <Button className="justify-content-center" onClick={display}>
-        Send Request
-      </Button>
-      <div className="item-container">
-        <h3>Bands</h3>
-        <button onClick={addItemHandler}>Add Band</button>
-        <ul>
-          {topArtist.map((pObj) => (
-            <li key={pObj.pCode}>
-              <a href={pObj.pLink}>{pObj.pName}</a>
-            </li>
-          ))}
-        </ul>
+ <div className="App"> 
+
+      <div className="modal-header justify-content-center" style={{backgroundImage: 'url('+hcbgImage+')', backgroundRepeat: "no-repeat", backgroundSize: "100% 90%", backgroundColor: "black",}}>
+        <h1 style={{ color: "white" , fontSize: 100}}>Swapify </h1>
+      </div>
+      <div style={{backgroundColor: "black"}}>
+            <br/>
+            <br/>
+      </div>
+
+      <div style={{display: "flex", alignItems: "center",justifyContent: "center" ,backgroundImage: 'url('+bodyImage+')', backgroundRepeat: "no-repeat", backgroundSize: "100% 100%", height:800}}>
+        <div class="container" >
+
+          <div class = "row" style={{color:"white"}}> 
+            <div className="d-flex justify-content-center align-items-center">
+              Step 1: Press the 'Generate Playlist' button five times.
+            </div>
+          </div>
+
+          <div class = "row">
+            <br/>
+          </div>
+
+          <div class = "row"> 
+            <div className="d-flex justify-content-center align-items-center">
+              <a className="btn btn-success" onClick={display}>
+                Generate Playlist
+              </a>
+            </div>
+          </div>
+
+          <div class = "row">
+            <br/>
+          </div>
+
+          <div class = "row" style={{color:"white"}}> 
+            <div className="d-flex justify-content-center align-items-center">
+              Step 2: Press the 'Reveal Playlist' button five times to show songs.
+            </div>
+          </div>
+
+          <div class = "row">
+            <br/>
+          </div>
+
+          <div class = "row">
+            <div className="d-flex justify-content-center align-items-center">
+              <a className="btn btn-success" onClick={addItemHandler}>
+                Reveal Playlist
+              </a>
+            </div>
+          </div>
+
+          <div class = "row">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+
+          <div class = "row">
+          
+            <div className="d-flex justify-content-center align-items-center">
+              <table className = "table table-striped" style={{backgroundColor: "black", border: "4px solid forestgreen", width: 500}}>
+              <th scope="row" style={{color: 'white', fontSize: 20, alignItems: "left"}}>Suggested Songs</th>
+                {topArtist.map((pObj) => (
+                  <tr key={pObj.pCode}>
+                    <td> 
+                    <a style={{color: 'white', fontSize: 16}} href={pObj.pLink}>
+                      {pObj.pName}
+                    </a>
+                    </td> 
+                  </tr>
+                ))}
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
