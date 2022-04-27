@@ -68,7 +68,7 @@ export default function Dashboard({ code }) {
 
     spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
-        const iRand = getRandomInt(9);
+        
 
         for(var i=0; i< 10; ++i){
           
