@@ -13,6 +13,7 @@
 
 
 # Running the Application
-#To run this application, open two terminals at once. On one terminal, type 'cd /client' and on the other, type 'cd /server' to enter the two main directories that run this app.
+#You NEED a Spotify account that you used at some point before and can log into. The whole point of this app is to access that data.
+#To run this application, open two terminals at once. On one terminal, type 'cd client' and on the other, type 'cd server' to enter the two main directories that run this app.
 #in the server directory terminal, type 'node index.js' 
 #in the client directory terminal, type 'npm run start'
