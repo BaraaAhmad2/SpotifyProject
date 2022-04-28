@@ -89,7 +89,6 @@ export default function Dashboard({ code }) {
   }
 
   const addItemHandler = () => {
-    let iRand =getRandomInt;
     let combined = artistName[count] + "- " + topSong[ze];
     let link = songURL[othercounter];
 
@@ -101,9 +100,25 @@ export default function Dashboard({ code }) {
         pLink: link,
       },
     ]);
-    ze++;
+    if(count <10){
     count++;
-    othercounter++;
+    ze = count;
+    
+    othercounter = count;
+    }
+    else{
+      combined = " "
+
+      setTopArtist([
+        ...topArtist,
+        {
+          pCode: combined,
+          pName: combined,
+          pLink: combined,
+        },
+      ]);
+    }
+    
   };
 
   useEffect(() => {
