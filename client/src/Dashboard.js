@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
-import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
-import axios from "axios";
-import { Button, Card } from "react-bootstrap";
-import ReactDOM from "react-dom";
-import update from "react-addons-update";
-import {NavLink, tbody, table} from  'react-bootstrap';
 import hcbgImage from "./images/header-background.jpg";
 import bodyImage from "./images/body.jpg";
 
@@ -27,12 +21,7 @@ var othercounter = 0;
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
 
-  const [playingTrack, setPlayingTrack] = useState();
-  const [lyrics, setLyrics] = useState("");
-
   const [topArtist, setTopArtist] = useState([{ pCode: "", pName: "" }]);
-
-  const [topSongs, setTopSongs] = useState([]);
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -52,7 +41,6 @@ export default function Dashboard({ code }) {
       const iRand = getRandomInt(9);
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
         function (data) {
-          //console.log(data.body.tracks.at(0).external_urls);
           if (tracker < 10) {
             topSong[tracker] = data.body.tracks.at(iRand).name;
             songURL[tracker] = data.body.tracks.at(iRand).external_urls.spotify;

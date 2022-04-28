@@ -1,9 +1,4 @@
 import React from "react";
-import { Col, Container } from "react-bootstrap";
-import { useState } from "react/cjs/react.development";
-import { useEffect } from "react/cjs/react.production.min";
-import useAuth from "./useAuth";
-import { Button} from  'react-bootstrap';
 import hcbgImage from "./images/header-background.jpg";
 import bodyImage from "./images/body.jpg";
 import logoImage from "./images/logo.png";
