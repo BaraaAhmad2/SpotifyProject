@@ -14,19 +14,22 @@ let artistName = [];
 let topSong = [];
 var count = 0;
 var tracker = 0;
-var tracker2 = 0;
 var ze = 0;
 var othercounter = 0;
 
 export default function Dashboard({ code }) {
+  //use code given from authorization to obtain access token
   const accessToken = useAuth(code);
 
+  //define hooks
   const [topArtist, setTopArtist] = useState([{ pCode: "", pName: "" }]);
 
+  //genereate random number to cycle through random order of songs
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
+  //display personal account stuff
   function display() {
     spotifyApi.getMe().then(
       function (data) {
@@ -37,11 +40,14 @@ export default function Dashboard({ code }) {
       }
     );
 
+    //given an artist ID, get their top tracks (url and name)
     function topTracks(artistID) {
       const iRand = getRandomInt(9);
       spotifyApi.getArtistTopTracks(artistID, "GB").then(
         function (data) {
           if (tracker < 10) {
+            //randomize the order of which the artists are shown
+            //use the same constant randomly generated number to display the correct link
             topSong[tracker] = data.body.tracks.at(iRand).name;
             songURL[tracker] = data.body.tracks.at(iRand).external_urls.spotify;
 
@@ -57,6 +63,7 @@ export default function Dashboard({ code }) {
       );
     }
 
+    //get a user's top artists, limit to 10
     spotifyApi.getMyTopArtists({ limit: 10 }).then(
       function (data) {
         
@@ -64,9 +71,15 @@ export default function Dashboard({ code }) {
         for(var i=0; i< 10; ++i){
           
       
+          //data.body is using the spotify api
+
+          //with each index, add an artist ID
           topBand[i] = data.body.items.at(i).id.toString();
+          //given the ID at the specific index, use that information to call the topTracks function
           topTracks(topBand[i]);
+          //save the artist name as a string
           artistName[i] = data.body.items.at(i).name.toString();
+          console.log(artistName[i])
           continue;
       }
       },
@@ -76,10 +89,12 @@ export default function Dashboard({ code }) {
     );
   }
 
+  //function to map the data and displaying it on the page
   const addItemHandler = () => {
     let combined = artistName[count] + "- " + topSong[ze];
     let link = songURL[othercounter];
 
+    //necessary information to display (in JSON format)
     setTopArtist([
       ...topArtist,
       {
@@ -109,6 +124,7 @@ export default function Dashboard({ code }) {
     
   };
 
+  //if you have an access token, go back to the previous page. otherwise, set a new acccess token
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);

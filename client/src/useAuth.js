@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useAuth(code) {
+
+  //define hooks
   const [accessToken, setAccessToken] = useState();
   const [refreshToken, setRefreshToken] = useState();
   const [expiresIn, setExpiresIn] = useState();
 
+
+  //sending post request to retrieve necessary tokens
   useEffect(() => {
     console.log(code);
     const config = { headers: { "Content-Type": "application/json" } };
@@ -24,14 +28,14 @@ export default function useAuth(code) {
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
-        window.history.pushState({}, null, "/");
+        window.history.pushState({}, null, "/");  //clean up URL
       })
       .catch(() => {
         window.location = "/";
       });
   }, [code]);
 
-  
+  //set useEffect to make the refresh token last longer
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
     const interval = setInterval(() => {
