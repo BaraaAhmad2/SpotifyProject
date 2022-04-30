@@ -17,3 +17,10 @@
 #To run this application, open two terminals at once. On one terminal, type 'cd client' and on the other, type 'cd server' to enter the two main directories that run this app.
 #in the server directory terminal, type 'node index.js' 
 #in the client directory terminal, type 'npm run start'
+
+
+# References
+#WebDevSimplified: https://youtu.be/Xcet6msf3eE
+#Spotify Web API Node: https://github.com/thelinmichael/spotify-web-api-node#features
+#ProgrammingKnowledge: https://youtu.be/HT82p_re-EY
+#Code Step by Step:https://youtu.be/HT82p_re-EY
